@@ -24,6 +24,7 @@ class LearningAgent(Agent):
         ###########
         # Set any additional class parameters as needed
         self.time = 1
+        self.a = 0.001
 
     def reset(self, destination=None, testing=False):
         """ The reset function is called at the beginning of each trial.
@@ -46,7 +47,7 @@ class LearningAgent(Agent):
             # self.epsilon = 0.9 ** self.time
             # self.epsilon = 0.99 ** self.time
             # self.epsilon = math.fabs(math.sin(self.alpha*self.time))
-            self.epsilon = math.fabs(math.cos(self.alpha*self.time))
+            self.epsilon = math.fabs(math.cos(self.a*self.time))
             # self.epsilon = self.epsilon - 0.05
             # self.epsilon = 1.0/(self.time**2)
             # self.epsilon *= 0.88
@@ -80,7 +81,9 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # Calculate the maximum Q-value of all actions for a given state
-        maxQ = self.Q[state][max(self.Q[state], key=lambda x: self.Q[state][x])]
+        # Old version maxQ = self.Q[state][max(self.Q[state], key=lambda x: self.Q[state][x])]
+        # Improved according to Udacity hint
+        maxQ = max(self.Q[state].values())
         return maxQ 
 
 
@@ -137,7 +140,7 @@ class LearningAgent(Agent):
         # When learning, implement the value iteration update rule
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
         if self.learning:
-            self.Q[state][action] = (self.Q[state][action] * (1 - self.alpha)) + (reward * self.alpha)
+            self.Q[state][action] = (self.Q[state][action]*(1-self.alpha))+(reward*self.alpha)
         return
 
 
